@@ -42,18 +42,19 @@ def post_comics_to_community(comics_id, community_id, access_token):
         photos = response.json()['response']
 
     for photo in photos:
-        params = {
-            'v': '5.131',
-            'access_token': access_token,
-            'owner_id': -community_id,
-            'from_group': 1,
-            'attachments': f"photo{photo['owner_id']}_{photo['id']}",
-            'message': alt
-        }
-        response = requests.post('https://api.vk.com/method/wall.post', params=params)
-        response.raise_for_status()
-        print(response.json())
-        os.remove(img_filename)
+        try:
+            params = {
+                'v': '5.131',
+                'access_token': access_token,
+                'owner_id': -community_id,
+                'from_group': 1,
+                'attachments': f"photo{photo['owner_id']}_{photo['id']}",
+                'message': alt
+            }
+            response = requests.post('https://api.vk.com/method/wall.post', params=params)
+            response.raise_for_status()
+        finally:
+            os.remove(img_filename)
 
 
 if __name__ == '__main__':
