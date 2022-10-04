@@ -38,7 +38,8 @@ def save_photo(img_filename, upload_url, access_token):
     response.raise_for_status()
     return response.json()['response']
 
-def upload_photos(photos, community_id, message):
+
+def post_comics_to_community(photos, community_id, message):
     for photo in photos:
         params = {
             'v': '5.131',
@@ -71,7 +72,6 @@ if __name__ == '__main__':
         upload_url = fetch_upload_url(access_token)
         photos = save_photo(img_filename, upload_url, access_token)
 
-        upload_photos(photos, community_id, comics_message)
+        post_comics_to_community(photos, community_id, comics_message)
     finally:
         os.remove(img_filename)
-
