@@ -1,4 +1,5 @@
 import os
+from random import randint
 
 from environs import Env
 import requests
@@ -62,7 +63,7 @@ if __name__ == '__main__':
     env = Env()
     env.read_env()
 
-    comics_id = 358  # тут может быть любой id комикса
+    comics_id = randint(1, 600)
     community_id = env.int('VK_GROUP_ID')
     access_token = env.str('VK_ACCESS_TOKEN')
     post_comics_to_community(comics_id, community_id, access_token)
