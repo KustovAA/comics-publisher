@@ -36,10 +36,11 @@ def post_comics_to_community(comics_id, community_id, access_token):
         url = response['upload_url']
         files = {'photo': file}
         response = requests.post(url, files=files)
-        response.raise_for_status()
-        response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=params, data=response.json())
-        response.raise_for_status()
-        photos = response.json()['response']
+
+    response.raise_for_status()
+    response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=params, data=response.json())
+    response.raise_for_status()
+    photos = response.json()['response']
 
     for photo in photos:
         try:
@@ -61,7 +62,7 @@ if __name__ == '__main__':
     env = Env()
     env.read_env()
 
-    comics_id = 357  # тут может быть любой id комикса
+    comics_id = 358  # тут может быть любой id комикса
     community_id = env.int('VK_GROUP_ID')
     access_token = env.str('VK_ACCESS_TOKEN')
     post_comics_to_community(comics_id, community_id, access_token)
