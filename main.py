@@ -6,11 +6,7 @@ import requests
 
 
 def fetch_image(url, filename, params):
-    headers = {
-        "User-Agent": "CoolBot/0.0 (https://example.org/coolbot/; coolbot@example.org)"
-    }
-
-    response = requests.get(url, headers=headers, params=params)
+    response = requests.get(url, params=params)
     response.raise_for_status()
 
     with open(filename, "wb") as file:
