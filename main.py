@@ -1,4 +1,5 @@
 import os
+import pathlib
 from random import randint
 
 from environs import Env
@@ -18,7 +19,7 @@ def fetch_comics(comics_id):
 
     img = response.content
 
-    return img, message
+    return img, message, f'{comics_id}{pathlib.Path(img_url).suffix}'
 
 
 def fetch_upload_url(access_token):
@@ -62,10 +63,8 @@ if __name__ == '__main__':
     comics_id = randint(first_comics_id, last_comics_id)
     community_id = env.int('VK_GROUP_ID')
     access_token = env.str('VK_ACCESS_TOKEN')
-    img_filename = f'{comics_id}.png'
+    comics_img, comics_message, img_filename = fetch_comics(comics_id)
     try:
-        comics_img, comics_message = fetch_comics(comics_id)
-
         with open(img_filename, "wb") as file:
             file.write(comics_img)
 
