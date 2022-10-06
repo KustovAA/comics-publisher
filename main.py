@@ -58,7 +58,9 @@ if __name__ == '__main__':
     env = Env()
     env.read_env()
 
-    comics_id = randint(1, 600)
+    first_comics_id = 1
+    last_comics_id = 2681
+    comics_id = randint(first_comics_id, last_comics_id)
     community_id = env.int('VK_GROUP_ID')
     access_token = env.str('VK_ACCESS_TOKEN')
     img_filename = f'{comics_id}.png'
