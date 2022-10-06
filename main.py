@@ -5,19 +5,20 @@ from environs import Env
 import requests
 
 
-def fetch_image(url):
-    response = requests.get(url)
-    response.raise_for_status()
-
-    return response.content
-
-
 def fetch_comics(comics_id):
     comics_url = f'https://xkcd.com/{comics_id}/info.0.json'
     response = requests.get(comics_url)
     response.raise_for_status()
 
-    return response.json()
+    comics = response.json()
+    img_url, message = comics['img'], comics['alt']
+
+    response = requests.get(img_url)
+    response.raise_for_status()
+
+    img = response.content
+
+    return img, message
 
 
 def fetch_upload_url(access_token):
@@ -60,14 +61,12 @@ if __name__ == '__main__':
     comics_id = randint(1, 600)
     community_id = env.int('VK_GROUP_ID')
     access_token = env.str('VK_ACCESS_TOKEN')
-    comics = fetch_comics(comics_id)
-    comics_img_url, comics_message = comics['img'], comics['alt']
     img_filename = f'{comics_id}.png'
     try:
-        img_file = fetch_image(comics_img_url)
+        comics_img, comics_message = fetch_comics(comics_id)
 
         with open(img_filename, "wb") as file:
-            file.write(img_file)
+            file.write(comics_img)
 
         upload_url = fetch_upload_url(access_token)
         photos = save_photo(img_filename, upload_url, access_token)
