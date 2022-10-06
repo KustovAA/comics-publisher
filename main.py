@@ -37,21 +37,20 @@ def save_photo(img_filename, upload_url, access_token):
     response.raise_for_status()
     response = requests.post('https://api.vk.com/method/photos.saveWallPhoto', params=params, data=response.json())
     response.raise_for_status()
-    return response.json()['response']
+    return response.json()['response'][0]
 
 
-def post_comics_to_community(photos, community_id, message):
-    for photo in photos:
-        params = {
-            'v': '5.131',
-            'access_token': access_token,
-            'owner_id': -community_id,
-            'from_group': 1,
-            'attachments': f"photo{photo['owner_id']}_{photo['id']}",
-            'message': message
-        }
-        response = requests.post('https://api.vk.com/method/wall.post', params=params)
-        response.raise_for_status()
+def post_comics_to_community(photo, community_id, message):
+    params = {
+        'v': '5.131',
+        'access_token': access_token,
+        'owner_id': -community_id,
+        'from_group': 1,
+        'attachments': f"photo{photo['owner_id']}_{photo['id']}",
+        'message': message
+    }
+    response = requests.post('https://api.vk.com/method/wall.post', params=params)
+    response.raise_for_status()
 
 
 if __name__ == '__main__':
@@ -71,8 +70,8 @@ if __name__ == '__main__':
             file.write(comics_img)
 
         upload_url = fetch_upload_url(access_token)
-        photos = save_photo(img_filename, upload_url, access_token)
+        photo = save_photo(img_filename, upload_url, access_token)
 
-        post_comics_to_community(photos, community_id, comics_message)
+        post_comics_to_community(photo, community_id, comics_message)
     finally:
         os.remove(img_filename)
