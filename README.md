@@ -4,7 +4,6 @@
 ## Окружение
 
 ### Зависимости
-* Django
 * environs
 * requests
 

@@ -41,13 +41,13 @@ def save_photo(img_filename, upload_url, access_token):
     return response.json()['response'][0]
 
 
-def post_comics_to_community(photo, community_id, message):
+def post_comics_to_community(owner_id, media_id, community_id, message):
     params = {
         'v': '5.131',
         'access_token': access_token,
         'owner_id': -community_id,
         'from_group': 1,
-        'attachments': f"photo{photo['owner_id']}_{photo['id']}",
+        'attachments': f"photo{owner_id}_{media_id}",
         'message': message
     }
     response = requests.post('https://api.vk.com/method/wall.post', params=params)
@@ -71,6 +71,6 @@ if __name__ == '__main__':
         upload_url = fetch_upload_url(access_token)
         photo = save_photo(img_filename, upload_url, access_token)
 
-        post_comics_to_community(photo, community_id, comics_message)
+        post_comics_to_community(photo['owner_id'], photo['id'], community_id, comics_message)
     finally:
         os.remove(img_filename)
